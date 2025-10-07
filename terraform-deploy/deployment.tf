@@ -1,7 +1,6 @@
 resource "kubernetes_deployment" "app" {
   metadata {
     name      = "techchallenge-api"
-    namespace = kubernetes_namespace.techchallenge.metadata[0].name
     labels = {
       app = "techchallenge-api"
     }
