@@ -16,7 +16,7 @@ terraform {
     organization = "techchallenge-lanchonete"
 
     workspaces {
-      name = "techchallenge-infra-k8s"
+      name = "techchallenge-app-deploy"
     }
   }
 }

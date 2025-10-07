@@ -57,21 +57,8 @@ jobs:
         working-directory: ./terraform-deploy
         run: terraform plan -out=tfplan
 
-      - name: Send plan to Terraform Cloud for Apply
-        env:
-          TF_TOKEN_app_terraform_io: ${{ secrets.TFC_API_TOKEN }}
-        working-directory: ./terraform-deploy
-        run: |
-          curl -X POST \
-            -H "Authorization: Bearer $TF_TOKEN_app_terraform_io" \
-            -H "Content-Type: application/vnd.api+json" \
-            -d '{
-                  "data": {
-                    "attributes": {
-                      "message": "GitHub Actions: Deploy to EKS",
-                      "plan": "'"$(cat tfplan)"'"
-                    },
-                    "type": "runs"
-                  }
-                }' \
-            https://app.terraform.io/api/v2/workspaces/techchallenge-app-deploy/runs
+      - name: Terraform Apply
+          env:
+            TF_TOKEN_app_terraform_io: ${{ secrets.TFC_API_TOKEN }}
+          working-directory: ./terraform-deploy
+          run: terraform apply -auto-approve tfplan
