@@ -48,9 +48,11 @@ jobs:
       - name: Terraform Init
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TFC_API_TOKEN }}
+        working-directory: ./terraform-deploy
         run: terraform init
 
       - name: Terraform Apply
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TFC_API_TOKEN }}
+        working-directory: ./terraform-deploy
         run: terraform apply -auto-approve
