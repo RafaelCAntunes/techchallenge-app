@@ -1,7 +1,6 @@
 resource "kubernetes_horizontal_pod_autoscaler_v2" "app" {
   metadata {
     name      = "techchallenge-hpa"
-    namespace = kubernetes_namespace.techchallenge.metadata[0].name
   }
 
   spec {
