@@ -33,34 +33,58 @@ resource "kubernetes_deployment" "app" {
           }
 
           env {
-            name = "SPRING_DATASOURCE_USERNAME"
-            value_from {
-              secret_key_ref {
-                name = "mysql-credentials"
-                key  = "app-username"
-              }
-            }
+            name  = "SPRING_DATASOURCE_URL"
+            value = "jdbc:mysql://${data.terraform_remote_state.db.outputs.rds_endpoint}/lanchonete"  # URL do DB
           }
 
           env {
-            name = "SPRING_DATASOURCE_PASSWORD"
-            value_from {
-              secret_key_ref {
-                name = "mysql-credentials"
-                key  = "app-password"
-              }
-            }
+            name  = "SPRING_DATASOURCE_USERNAME"
+            value = data.terraform_remote_state.db.outputs.db_username # Variável de usuário do DB
           }
 
           env {
-            name  = "SPRING_CONFIG_LOCATION"
-            value = "/config/application.yml"
+            name  = "SPRING_DATASOURCE_PASSWORD"
+            value = data.terraform_remote_state.db.outputs.db_password # Variável de senha do DB
           }
 
-          volume_mount {
-            name       = "app-config"
-            mount_path = "/config"
-            read_only  = true
+          env {
+            name  = "SPRING_DATASOURCE_DRIVER_CLASS_NAME"
+            value = "com.mysql.cj.jdbc.Driver"
+          }
+
+          env {
+            name  = "SPRING_HIKARI_MAXIMUM_POOL_SIZE"
+            value = "10"
+          }
+
+          env {
+            name  = "SPRING_HIKARI_CONNECTION_TIMEOUT"
+            value = "30000"
+          }
+
+          env {
+            name  = "SPRING_HIKARI_IDLE_TIMEOUT"
+            value = "600000"
+          }
+
+          env {
+            name  = "SPRING_HIKARI_MAX_LIFETIME"
+            value = "1800000"
+          }
+
+          env {
+            name  = "SPRING_JPA_HIBERNATE_DDL_AUTO"
+            value = "update"
+          }
+
+          env {
+            name  = "SPRING_JPA_SHOW_SQL"
+            value = "true"
+          }
+
+          env {
+            name  = "SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"
+            value = "org.hibernate.dialect.MySQLDialect"
           }
 
           resources {
@@ -91,14 +115,6 @@ resource "kubernetes_deployment" "app" {
             initial_delay_seconds = 10
             period_seconds        = 10
             failure_threshold     = 6
-          }
-        }
-
-        volume {
-          name = "app-config"
-
-          config_map {
-            name = kubernetes_config_map.app_config.metadata[0].name
           }
         }
       }
