@@ -102,8 +102,9 @@ resource "kubernetes_deployment" "app" {
               path = "/actuator/health"
               port = 8080
             }
-            initial_delay_seconds = 30
+            initial_delay_seconds = 90
             period_seconds        = 30
+            failure_threshold     = 3
           }
 
           readiness_probe {
@@ -111,8 +112,8 @@ resource "kubernetes_deployment" "app" {
               path = "/actuator/health"
               port = 8080
             }
-            initial_delay_seconds = 90
-            period_seconds        = 10
+            initial_delay_seconds = 120
+            period_seconds        = 15
             failure_threshold     = 6
           }
         }
