@@ -89,11 +89,11 @@ resource "kubernetes_deployment" "app" {
           resources {
             limits = {
               cpu    = "200m"
-              memory = "512Mi"
+              memory = "1Gi"
             }
             requests = {
-              cpu    = "100m"
-              memory = "256Mi"
+              cpu    = "300m"
+              memory = "512Mi"
             }
           }
 
@@ -111,7 +111,7 @@ resource "kubernetes_deployment" "app" {
               path = "/actuator/health"
               port = 8080
             }
-            initial_delay_seconds = 10
+            initial_delay_seconds = 90
             period_seconds        = 10
             failure_threshold     = 6
           }
